@@ -73,16 +73,18 @@ mainframeCloseStroke.Color = Color3.fromRGB(255, 255, 255)
 mainframeCloseStroke.Thickness = 2
 mainframeCloseStroke.Parent = mainframeClose
 
--- Close Button (TextButton mit fetter Schrift)
+-- Close Button (TextButton mit fetter Schrift, zentriert)
 local mainframeCloseButton = Instance.new("TextButton")
 mainframeCloseButton.BackgroundTransparency = 1
-mainframeCloseButton.Size = UDim2.new(0, 79, 0, 21)
-mainframeClose.Position = UDim2.new(0, 0, 0.096, 0)
+mainframeCloseButton.Size = UDim2.new(1, 0, 1, 0) -- volle Größe vom Parent
+mainframeCloseButton.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainframeCloseButton.AnchorPoint = Vector2.new(0.5, 0.5) -- zentriert im Parent
 mainframeCloseButton.Text = "Close"
 mainframeCloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeCloseButton.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
 mainframeCloseButton.TextScaled = true
 mainframeCloseButton.Parent = mainframeClose
+
 
 -- Funktion zum Schließen
 mainframeCloseButton.MouseButton1Click:Connect(function()
@@ -103,6 +105,7 @@ mainframeTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeTitle.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
 mainframeTitle.TextScaled = true
 mainframeTitle.Parent = mainframe
+
 
 
 
