@@ -2,11 +2,15 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- ScreenGui
 local screengui = Instance.new("ScreenGui")
 screengui.Name = "JM.Menu"
+screengui.ResetOnSpawn = false
 screengui.Parent = playerGui
 
+-- Hauptframe
 local mainframe = Instance.new("Frame")
+mainframe.Name = "MainFrame"
 mainframe.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
 mainframe.Size = UDim2.new(0, 693, 0, 507)
 mainframe.Position = UDim2.new(0.319, 0, 0.184, 0)
@@ -21,6 +25,7 @@ local mainframeCorner = Instance.new("UICorner")
 mainframeCorner.CornerRadius = UDim.new(0, 10)
 mainframeCorner.Parent = mainframe
 
+-- Liste unten im Frame
 local mainframeListframe = Instance.new("Frame")
 mainframeListframe.BackgroundTransparency = 1
 mainframeListframe.Size = UDim2.new(0, 693, 0, 36)
@@ -35,48 +40,52 @@ mainframeListframeMain.HorizontalAlignment = Enum.HorizontalAlignment.Center
 mainframeListframeMain.VerticalAlignment = Enum.VerticalAlignment.Top
 mainframeListframeMain.Parent = mainframeListframe
 
-local mainframeListframeScort1 = Instance.new("Frame")
-mainframeListframeScort1.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
-mainframeListframeScort1.Size = UDim2.new(0, 79, 0, 36)
-mainframeListframeScort1.Parent = mainframeListframe
+-- Item 1
+local scort1 = Instance.new("Frame")
+scort1.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
+scort1.Size = UDim2.new(0, 79, 0, 36)
+scort1.Parent = mainframeListframe
 
-local mainframeListframeScort1Stroke = Instance.new("UIStroke")
-mainframeListframeScort1Stroke.Color = Color3.fromRGB(255, 255, 255)
-mainframeListframeScort1Stroke.Thickness = 2
-mainframeListframeScort1Stroke.Parent = mainframeListframeScort1
+local scort1Stroke = Instance.new("UIStroke")
+scort1Stroke.Color = Color3.fromRGB(255, 255, 255)
+scort1Stroke.Thickness = 2
+scort1Stroke.Parent = scort1
 
-local mainframeListframeScort1Corner = Instance.new("UICorner")
-mainframeListframeScort1Corner.CornerRadius = UDim.new(0, 3)
-mainframeListframeScort1Corner.Parent = mainframeListframeScort1
+local scort1Corner = Instance.new("UICorner")
+scort1Corner.CornerRadius = UDim.new(0, 3)
+scort1Corner.Parent = scort1
 
-local mainframeListframeScort2 = Instance.new("Frame")
-mainframeListframeScort1.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
-mainframeListframeScort1.Size = UDim2.new(0, 79, 0, 36)
-mainframeListframeScort1.Parent = mainframeListframe
+-- Item 2
+local scort2 = Instance.new("Frame")
+scort2.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
+scort2.Size = UDim2.new(0, 79, 0, 36)
+scort2.Parent = mainframeListframe
 
-local mainframeListframeScort2Stroke = Instance.new("UIStroke")
-mainframeListframeScort2Stroke.Color = Color3.fromRGB(255, 255, 255)
-mainframeListframeScort2Stroke.Thickness = 2
-mainframeListframeScort2Stroke.Parent = mainframeListframeScort2
+local scort2Stroke = Instance.new("UIStroke")
+scort2Stroke.Color = Color3.fromRGB(255, 255, 255)
+scort2Stroke.Thickness = 2
+scort2Stroke.Parent = scort2
 
-local mainframeListframeScort2Corner = Instance.new("UICorner")
-mainframeListframeScort2Corner.CornerRadius = UDim.new(0, 3)
-mainframeListframeScort2Corner.Parent = mainframeListframeScort2
+local scort2Corner = Instance.new("UICorner")
+scort2Corner.CornerRadius = UDim.new(0, 3)
+scort2Corner.Parent = scort2
 
-local mainframeListframeScort3 = Instance.new("Frame")
-mainframeListframeScort1.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
-mainframeListframeScort1.Size = UDim2.new(0, 79, 0, 36)
-mainframeListframeScort1.Parent = mainframeListframe
+-- Item 3
+local scort3 = Instance.new("Frame")
+scort3.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
+scort3.Size = UDim2.new(0, 79, 0, 36)
+scort3.Parent = mainframeListframe
 
-local mainframeListframeScort3Stroke = Instance.new("UIStroke")
-mainframeListframeScort3Stroke.Color = Color3.fromRGB(255, 255, 255)
-mainframeListframeScort3Stroke.Thickness = 2
-mainframeListframeScort3Stroke.Parent = mainframeListframeScort3
+local scort3Stroke = Instance.new("UIStroke")
+scort3Stroke.Color = Color3.fromRGB(255, 255, 255)
+scort3Stroke.Thickness = 2
+scort3Stroke.Parent = scort3
 
-local mainframeListframeScort3Corner = Instance.new("UICorner")
-mainframeListframeScort3Corner.CornerRadius = UDim.new(0, 3)
-mainframeListframeScort3Corner.Parent = mainframeListframeScort3
+local scort3Corner = Instance.new("UICorner")
+scort3Corner.CornerRadius = UDim.new(0, 3)
+scort3Corner.Parent = scort3
 
+-- Close-Button oben rechts
 local mainframeClose = Instance.new("Frame")
 mainframeClose.BackgroundColor3 = Color3.fromRGB(16, 16, 16)
 mainframeClose.Size = UDim2.new(0, 79, 0, 27)
@@ -85,7 +94,7 @@ mainframeClose.Parent = mainframe
 
 local mainframeCloseText = Instance.new("TextLabel")
 mainframeCloseText.BackgroundTransparency = 1
-mainframeCloseText.Size = UDim2.new(0, 79, 0, 21)
+mainframeCloseText.Size = UDim2.new(1, 0, 1, 0)
 mainframeCloseText.Text = "Close"
 mainframeCloseText.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeCloseText.Font = Enum.Font.Arimo
@@ -101,6 +110,7 @@ local mainframeCloseCorner = Instance.new("UICorner")
 mainframeCloseCorner.CornerRadius = UDim.new(0, 3)
 mainframeCloseCorner.Parent = mainframeClose
 
+-- Titel oben links
 local mainframeTitle = Instance.new("TextLabel")
 mainframeTitle.BackgroundTransparency = 1
 mainframeTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -111,3 +121,4 @@ mainframeTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeTitle.Font = Enum.Font.Arimo
 mainframeTitle.TextScaled = true
 mainframeTitle.Parent = mainframe
+
