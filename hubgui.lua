@@ -1,248 +1,325 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- ScreenGui
+-- ====== SCREEN GUI Setup =======
 local screengui = Instance.new("ScreenGui")
 screengui.Name = "Void Hacks"
 screengui.ResetOnSpawn = false
 screengui.Parent = playerGui
+screengui.Enabled = true
 
--- MainFrame (draggable, modern style)
+-- ====== LOADING SCREEN =======
+local loadingFrame = Instance.new("Frame")
+loadingFrame.Size = UDim2.new(1,0,1,0)
+loadingFrame.BackgroundColor3 = Color3.fromRGB(18,18,18)
+loadingFrame.Parent = screengui
+loadingFrame.ZIndex = 10
+
+local loadingText = Instance.new("TextLabel")
+loadingText.Size = UDim2.new(1,0,0,50)
+loadingText.Position = UDim2.new(0,0,0.5,-25)
+loadingText.BackgroundTransparency = 1
+loadingText.Text = "Loading..."
+loadingText.Font = Enum.Font.ArialBold
+loadingText.TextColor3 = Color3.fromRGB(150, 150, 255)
+loadingText.TextScaled = true
+loadingText.Parent = loadingFrame
+
+-- Animate loading text (fade in/out loop)
+coroutine.wrap(function()
+    while loadingFrame and loadingFrame.Parent do
+        for i=0,1,0.02 do
+            loadingText.TextColor3 = Color3.fromRGB(150, 150, 255):Lerp(Color3.fromRGB(255,255,255), i)
+            wait(0.02)
+        end
+        for i=0,1,0.02 do
+            loadingText.TextColor3 = Color3.fromRGB(255,255,255):Lerp(Color3.fromRGB(150, 150, 255), i)
+            wait(0.02)
+        end
+    end
+end)()
+
+-- ====== MAIN FRAME (hidden initially) =======
 local mainframe = Instance.new("Frame")
 mainframe.Name = "MainFrame"
-mainframe.BackgroundColor3 = Color3.fromRGB(24, 24, 24) -- dunkler und edel
 mainframe.Size = UDim2.new(0, 700, 0, 520)
 mainframe.Position = UDim2.new(0.32, 0, 0.18, 0)
+mainframe.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+mainframe.Visible = false
 mainframe.Active = true
 mainframe.Draggable = true
 mainframe.Parent = screengui
+mainframe.ZIndex = 5
+
+local mainframeCorner = Instance.new("UICorner")
+mainframeCorner.CornerRadius = UDim.new(0, 18)
+mainframeCorner.Parent = mainframe
 
 local mainframeStroke = Instance.new("UIStroke")
-mainframeStroke.Color = Color3.fromRGB(100, 149, 237) -- Kornblumenblau als Akzent
+mainframeStroke.Color = Color3.fromRGB(80, 120, 255)
 mainframeStroke.Thickness = 3
 mainframeStroke.Parent = mainframe
 
-local mainframeCorner = Instance.new("UICorner")
-mainframeCorner.CornerRadius = UDim.new(0, 15)
-mainframeCorner.Parent = mainframe
+-- TITLE
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, -120, 0, 45)
+title.Position = UDim2.new(0, 20, 0, 10)
+title.BackgroundTransparency = 1
+title.Text = "Void Hacks"
+title.Font = Enum.Font.Arimo
+title.TextScaled = true
+title.TextColor3 = Color3.fromRGB(235, 235, 235)
+title.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.Parent = mainframe
 
--- Titel
-local mainframeTitle = Instance.new("TextLabel")
-mainframeTitle.BackgroundTransparency = 1
-mainframeTitle.TextXAlignment = Enum.TextXAlignment.Left
-mainframeTitle.Size = UDim2.new(1, -100, 0, 40)
-mainframeTitle.Position = UDim2.new(0, 20, 0, 10)
-mainframeTitle.Text = "Void Hacks"
-mainframeTitle.TextColor3 = Color3.fromRGB(235, 235, 235)
-mainframeTitle.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
-mainframeTitle.TextScaled = true
-mainframeTitle.Parent = mainframe
-
--- Close Button Frame
-local closeFrame = Instance.new("Frame")
-closeFrame.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-closeFrame.Size = UDim2.new(0, 80, 0, 30)
-closeFrame.Position = UDim2.new(1, -90, 0, 10)
-closeFrame.AnchorPoint = Vector2.new(0, 0)
-closeFrame.Parent = mainframe
-
-local closeFrameCorner = Instance.new("UICorner")
-closeFrameCorner.CornerRadius = UDim.new(0, 6)
-closeFrameCorner.Parent = closeFrame
-
-local closeFrameStroke = Instance.new("UIStroke")
-closeFrameStroke.Color = Color3.fromRGB(100, 149, 237)
-closeFrameStroke.Thickness = 2
-closeFrameStroke.Parent = closeFrame
-
+-- CLOSE BUTTON
 local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(1, 0, 1, 0)
-closeButton.BackgroundTransparency = 1
+closeButton.Size = UDim2.new(0, 90, 0, 40)
+closeButton.Position = UDim2.new(1, -110, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 closeButton.Text = "CLOSE"
+closeButton.Font = Enum.Font.Arimo
+closeButton.TextScaled = true
 closeButton.TextColor3 = Color3.fromRGB(235, 235, 235)
 closeButton.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
-closeButton.TextScaled = true
-closeButton.Parent = closeFrame
+closeButton.AutoButtonColor = false
+closeButton.Parent = mainframe
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 12)
+closeCorner.Parent = closeButton
+
+local closeStroke = Instance.new("UIStroke")
+closeStroke.Color = Color3.fromRGB(80, 120, 255)
+closeStroke.Thickness = 2
+closeStroke.Parent = closeButton
+
+closeButton.MouseEnter:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(80, 120, 255)
+    closeButton.TextColor3 = Color3.fromRGB(30, 30, 30)
+end)
+closeButton.MouseLeave:Connect(function()
+    closeButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    closeButton.TextColor3 = Color3.fromRGB(235, 235, 235)
+end)
 
 closeButton.MouseButton1Click:Connect(function()
     screengui.Enabled = false
 end)
 
--- Bottom Buttons Container
-local bottomButtonsFrame = Instance.new("Frame")
-bottomButtonsFrame.BackgroundTransparency = 1
-bottomButtonsFrame.Size = UDim2.new(1, 0, 0, 45)
-bottomButtonsFrame.Position = UDim2.new(0, 0, 1, -55)
-bottomButtonsFrame.Parent = mainframe
+-- BOTTOM BUTTONS CONTAINER
+local bottomFrame = Instance.new("Frame")
+bottomFrame.Size = UDim2.new(1, 0, 0, 50)
+bottomFrame.Position = UDim2.new(0, 0, 1, -60)
+bottomFrame.BackgroundTransparency = 1
+bottomFrame.Parent = mainframe
 
-local listLayout = Instance.new("UIListLayout")
-listLayout.FillDirection = Enum.FillDirection.Horizontal
-listLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-listLayout.SortOrder = Enum.SortOrder.LayoutOrder
-listLayout.Padding = UDim.new(0, 20)
-listLayout.Parent = bottomButtonsFrame
+local uiList = Instance.new("UIListLayout")
+uiList.FillDirection = Enum.FillDirection.Horizontal
+uiList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+uiList.SortOrder = Enum.SortOrder.LayoutOrder
+uiList.Padding = UDim.new(0, 25)
+uiList.Parent = bottomFrame
 
--- Button Factory function for consistent style
-local function createBottomButton(text, width)
+-- Button Factory (stylish, consistent)
+local function createTabButton(text, width)
     local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, width, 0, 40)
-    btn.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
+    btn.Size = UDim2.new(0, width, 0, 45)
+    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     btn.Text = text:upper()
-    btn.FontFace = Font.fromName("Arimo", Enum.FontWeight.SemiBold)
+    btn.Font = Enum.Font.Arimo
     btn.TextColor3 = Color3.fromRGB(235, 235, 235)
     btn.TextScaled = true
     btn.AutoButtonColor = false
-    btn.Parent = bottomButtonsFrame
+    btn.Parent = bottomFrame
 
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
+    corner.CornerRadius = UDim.new(0, 12)
     corner.Parent = btn
 
     local stroke = Instance.new("UIStroke")
-    stroke.Color = Color3.fromRGB(100, 149, 237)
+    stroke.Color = Color3.fromRGB(80, 120, 255)
     stroke.Thickness = 2
     stroke.Parent = btn
 
-    -- Hover effect
     btn.MouseEnter:Connect(function()
-        btn.BackgroundColor3 = Color3.fromRGB(100, 149, 237)
+        btn.BackgroundColor3 = Color3.fromRGB(80, 120, 255)
         btn.TextColor3 = Color3.fromRGB(30, 30, 30)
     end)
     btn.MouseLeave:Connect(function()
-        btn.BackgroundColor3 = Color3.fromRGB(32, 32, 32)
-        btn.TextColor3 = Color3.fromRGB(235, 235, 235)
+        if not btn:GetAttribute("Selected") then
+            btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            btn.TextColor3 = Color3.fromRGB(235, 235, 235)
+        end
     end)
 
     return btn
 end
 
-local btnMain = createBottomButton("Main", 120)
-local btnPlayer = createBottomButton("Player", 120)
-local btnMods = createBottomButton("Modifications", 160)
+local btnMain = createTabButton("Main", 130)
+local btnPlayer = createTabButton("Player", 130)
+local btnMods = createTabButton("Modifications", 180)
 
--- ScrollingFrames (für Inhalt)
-local function createScrollingFrame()
+-- ScrollFrames for tabs
+local function createScrollFrame()
     local sf = Instance.new("ScrollingFrame")
-    sf.Size = UDim2.new(1, -40, 1, -110)
+    sf.Size = UDim2.new(1, -40, 1, -130)
     sf.Position = UDim2.new(0, 20, 0, 60)
-    sf.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
+    sf.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     sf.BorderSizePixel = 0
     sf.ScrollBarThickness = 8
-    sf.CanvasSize = UDim2.new(0, 0, 1, 0)
     sf.Visible = false
     sf.Parent = mainframe
 
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 15)
+    corner.CornerRadius = UDim.new(0, 18)
     corner.Parent = sf
 
     return sf
 end
 
-local mainScroll = createScrollingFrame()
-local playerScroll = createScrollingFrame()
-local modsScroll = createScrollingFrame()
+local mainScroll = createScrollFrame()
+local playerScroll = createScrollFrame()
+local modsScroll = createScrollFrame()
 
--- Show only mainScroll initially
-mainScroll.Visible = true
+-- Show one tab and style buttons
+local function selectTab(tabButton, scrollFrame)
+    btnMain:SetAttribute("Selected", false)
+    btnPlayer:SetAttribute("Selected", false)
+    btnMods:SetAttribute("Selected", false)
+    btnMain.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btnMain.TextColor3 = Color3.fromRGB(235,235,235)
+    btnPlayer.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btnPlayer.TextColor3 = Color3.fromRGB(235,235,235)
+    btnMods.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btnMods.TextColor3 = Color3.fromRGB(235,235,235)
 
--- Toggle function for bottom buttons
-local function showFrame(frame)
+    tabButton:SetAttribute("Selected", true)
+    tabButton.BackgroundColor3 = Color3.fromRGB(80,120,255)
+    tabButton.TextColor3 = Color3.fromRGB(30,30,30)
+
     mainScroll.Visible = false
     playerScroll.Visible = false
     modsScroll.Visible = false
-    frame.Visible = true
+    scrollFrame.Visible = true
 end
+
+selectTab(btnMain, mainScroll)
 
 btnMain.MouseButton1Click:Connect(function()
-    showFrame(mainScroll)
+    selectTab(btnMain, mainScroll)
 end)
-
 btnPlayer.MouseButton1Click:Connect(function()
-    showFrame(playerScroll)
+    selectTab(btnPlayer, playerScroll)
 end)
-
 btnMods.MouseButton1Click:Connect(function()
-    showFrame(modsScroll)
+    selectTab(btnMods, modsScroll)
 end)
 
--- MainScroll: Professioneller Toggle Switch mit Text "MaxRunsYou99"
-local toggleContainer = Instance.new("Frame")
-toggleContainer.Size = UDim2.new(0, 280, 0, 60)
-toggleContainer.Position = UDim2.new(0.5, -140, 0.5, -30)
-toggleContainer.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-toggleContainer.Parent = mainScroll
+-- ======= Main Tab Contents =======
 
-local toggleCorner = Instance.new("UICorner")
-toggleCorner.CornerRadius = UDim.new(0, 12)
-toggleCorner.Parent = toggleContainer
+-- Label "MaxRunsYou99"
+local labelMR = Instance.new("TextLabel")
+labelMR.Size = UDim2.new(1, -40, 0, 40)
+labelMR.Position = UDim2.new(0, 20, 0, 20)
+labelMR.BackgroundTransparency = 1
+labelMR.Text = "MaxRunsYou99"
+labelMR.TextColor3 = Color3.fromRGB(220, 220, 220)
+labelMR.Font = Enum.Font.Arimo
+labelMR.TextScaled = true
+labelMR.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
+labelMR.TextXAlignment = Enum.TextXAlignment.Left
+labelMR.Parent = mainScroll
 
--- Beschriftung links
-local toggleLabel = Instance.new("TextLabel")
-toggleLabel.Size = UDim2.new(0.65, 0, 1, 0)
-toggleLabel.BackgroundTransparency = 1
-toggleLabel.Text = "MaxRunsYou99"
-toggleLabel.TextColor3 = Color3.fromRGB(235, 235, 235)
-toggleLabel.FontFace = Font.fromName("Arimo", Enum.FontWeight.SemiBold)
-toggleLabel.TextScaled = true
-toggleLabel.TextXAlignment = Enum.TextXAlignment.Left
-toggleLabel.Parent = toggleContainer
+-- Button "Gun Dupe"
+local gunDupeBtn = Instance.new("TextButton")
+gunDupeBtn.Size = UDim2.new(0, 260, 0, 50)
+gunDupeBtn.Position = UDim2.new(0, 20, 0, 70)
+gunDupeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+gunDupeBtn.Text = "Gun Dupe"
+gunDupeBtn.Font = Enum.Font.Arimo
+gunDupeBtn.TextScaled = true
+gunDupeBtn.TextColor3 = Color3.fromRGB(230, 230, 230)
+gunDupeBtn.AutoButtonColor = false
+gunDupeBtn.Parent = mainScroll
 
--- Toggle Switch (Slider)
-local toggleSwitch = Instance.new("Frame")
-toggleSwitch.Size = UDim2.new(0, 60, 0, 28)
-toggleSwitch.Position = UDim2.new(0.7, 0, 0.5, 0)
-toggleSwitch.AnchorPoint = Vector2.new(0, 0.5)
-toggleSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-toggleSwitch.Parent = toggleContainer
+local gunDupeCorner = Instance.new("UICorner")
+gunDupeCorner.CornerRadius = UDim.new(0, 14)
+gunDupeCorner.Parent = gunDupeBtn
 
-local toggleSwitchCorner = Instance.new("UICorner")
-toggleSwitchCorner.CornerRadius = UDim.new(0, 14)
-toggleSwitchCorner.Parent = toggleSwitch
+local gunDupeStroke = Instance.new("UIStroke")
+gunDupeStroke.Color = Color3.fromRGB(80, 120, 255)
+gunDupeStroke.Thickness = 2
+gunDupeStroke.Parent = gunDupeBtn
 
-local toggleButton = Instance.new("Frame")
-toggleButton.Size = UDim2.new(0, 26, 0, 26)
-toggleButton.Position = UDim2.new(0, 2, 0, 1)
-toggleButton.BackgroundColor3 = Color3.fromRGB(100, 149, 237)
-toggleButton.Parent = toggleSwitch
+-- Hover effect
+gunDupeBtn.MouseEnter:Connect(function()
+    gunDupeBtn.BackgroundColor3 = Color3.fromRGB(80, 120, 255)
+    gunDupeBtn.TextColor3 = Color3.fromRGB(30, 30, 30)
+end)
+gunDupeBtn.MouseLeave:Connect(function()
+    gunDupeBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    gunDupeBtn.TextColor3 = Color3.fromRGB(230, 230, 230)
+end)
 
-local toggleButtonCorner = Instance.new("UICorner")
-toggleButtonCorner.CornerRadius = UDim.new(0, 13)
-toggleButtonCorner.Parent = toggleButton
+-- Gun Dupe Functionality
+gunDupeBtn.MouseButton1Click:Connect(function()
+    local character = player.Character
+    if not character then return end
 
-local toggleOn = false
+    -- Find equipped tool
+    local tool = nil
+    for _, child in pairs(character:GetChildren()) do
+        if child:IsA("Tool") then
+            tool = child
+            break
+        end
+    end
 
-local function updateToggle()
-    if toggleOn then
-        toggleButton:TweenPosition(UDim2.new(1, -28, 0, 1), "Out", "Quad", 0.3, true)
-        toggleSwitch.BackgroundColor3 = Color3.fromRGB(100, 149, 237)
+    if tool then
+        local backpack = player:FindFirstChildOfClass("Backpack")
+        if backpack then
+            -- Duplicate the tool and put the duplicate into the backpack
+            local clone = tool:Clone()
+            clone.Parent = backpack
+
+            -- Unequip the tool
+            player.Character.Humanoid:UnequipTools()
+
+            -- Optional: brief flash to indicate success
+            gunDupeBtn.Text = "Duplicated!"
+            wait(1)
+            gunDupeBtn.Text = "Gun Dupe"
+        end
     else
-        toggleButton:TweenPosition(UDim2.new(0, 2, 0, 1), "Out", "Quad", 0.3, true)
-        toggleSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    end
-end
-
-toggleSwitch.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        toggleOn = not toggleOn
-        updateToggle()
+        gunDupeBtn.Text = "No Tool Equipped!"
+        wait(1.5)
+        gunDupeBtn.Text = "Gun Dupe"
     end
 end)
 
-updateToggle()
-
--- Keybind: RightShift toggled GUI visibility
-local guiVisible = true
+-- ===== Keybind: RightShift toggles GUI =====
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not gameProcessed and input.KeyCode == Enum.KeyCode.RightShift then
-        guiVisible = not guiVisible
-        screengui.Enabled = guiVisible
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.RightShift then
+        screengui.Enabled = not screengui.Enabled
     end
 end)
 
-
+-- ===== Simulate loading delay and then fade loading screen out, show mainframe =====
+task.spawn(function()
+    wait(1.5)  -- Simulate loading work
+    local tweenOut = TweenService:Create(loadingFrame, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1})
+    tweenOut:Play()
+    tweenOut.Completed:Wait()
+    loadingFrame.Visible = false
+    mainframe.Visible = true
+end)
 
 
 
