@@ -1,8 +1,15 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-
 local playerGui = player:WaitForChild("PlayerGui")
 
+-- Alle existierenden ScreenGuis mit Namen "Void Hacks" entfernen
+for _, gui in pairs(playerGui:GetChildren()) do
+    if gui:IsA("ScreenGui") and gui.Name == "Void Hacks" then
+        gui:Destroy()
+    end
+end
+
+-- Neues ScreenGui erstellen
 local screengui = Instance.new("ScreenGui")
 screengui.Name = "Void Hacks"
 screengui.ResetOnSpawn = false
@@ -50,7 +57,6 @@ textButton.MouseButton1Click:Connect(function()
     end
 
     if tool then
-        -- Tool unequippen
         local humanoid = character:FindFirstChildOfClass("Humanoid")
         if humanoid then
             humanoid:UnequipTools()
@@ -59,11 +65,9 @@ textButton.MouseButton1Click:Connect(function()
         end
         wait(0.1)
 
-        -- Tool klonen und in Backpack packen
         local clone = tool:Clone()
         clone.Parent = player.Backpack
 
-        -- Skripte im geklonten Tool neu starten
         restartScripts(clone)
 
         print("Tool erfolgreich dupliziert!")
@@ -71,6 +75,8 @@ textButton.MouseButton1Click:Connect(function()
         warn("Kein Tool ausgerüstet.")
     end
 end)
+
+
 
 
 
