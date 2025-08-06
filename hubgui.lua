@@ -7,7 +7,7 @@ screengui.Name = "JM.Menu"
 screengui.Parent = playerGui
 
 local mainframe = Instance.new("Frame")
-mainframe.BackgroundColor3 = Color3.new(0.117647, 0.117647, 0.117647)
+mainframe.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 mainframe.Size = UDim2.new(0, 693, 0, 507)
 mainframe.Position = UDim2.new(0.319, 0, 0.184, 0)
 mainframe.Parent = screengui
