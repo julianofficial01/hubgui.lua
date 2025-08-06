@@ -92,6 +92,15 @@ mainframeCloseText.Font = Enum.Font.Arimo
 mainframeCloseText.TextScaled = true
 mainframeCloseText.Parent = mainframeClose
 
+local mainframeCloseStroke = Instance.new("UIStroke")
+mainframeCloseStroke.Color = Color3.fromRGB(255, 255, 255)
+mainframeCloseStroke.Thickness = 2
+mainframeCloseStroke.Parent = mainframeClose
+
+local mainframeCloseCorner = Instance.new("UICorner")
+mainframeCloseCorner.CornerRadius = UDim.new(0, 3)
+mainframeCloseCorner.Parent = mainframeClose
+
 local mainframeTitle = Instance.new("TextLabel")
 mainframeTitle.BackgroundTransparency = 1
 mainframeTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -102,4 +111,3 @@ mainframeTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeTitle.Font = Enum.Font.Arimo
 mainframeTitle.TextScaled = true
 mainframeTitle.Parent = mainframe
-
