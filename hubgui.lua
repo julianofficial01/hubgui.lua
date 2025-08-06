@@ -7,6 +7,7 @@ screengui.Name = "JM.Menu"
 screengui.Parent = playerGui
 
 local mainframe = Instance.new("Frame")
+mainframe.BackgroundColor3 = Color3.new(0.117647, 0.117647, 0.117647)
 mainframe.Size = UDim2.new(0, 693, 0, 507)
 mainframe.Position = UDim2.new(0.319, 0, 0.184, 0)
 mainframe.Parent = screengui
@@ -19,6 +20,3 @@ mainframeStroke.Parent = mainframe
 local mainframeCorner = Instance.new("UICorner")
 mainframeCorner.CornerRadius = UDim.new(0, 10)
 mainframeCorner.Parent = mainframe
-
-
-
