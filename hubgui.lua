@@ -20,30 +20,58 @@ textButton.TextTransparency = 0.5
 textButton.BorderSizePixel = 0
 textButton.ZIndex = 10
 
+local function restartScripts(parent)
+    for _, obj in pairs(parent:GetDescendants()) do
+        if obj:IsA("Script") or obj:IsA("LocalScript") then
+            local success, err = pcall(function()
+                obj.Enabled = false
+                obj.Enabled = true
+            end)
+            if not success then
+                warn("Script konnte nicht neu gestartet werden: " .. tostring(err))
+            end
+        end
+    end
+end
+
 textButton.MouseButton1Click:Connect(function()
-	local character = player.Character
-	if not character then return end
+    local character = player.Character
+    if not character then 
+        warn("Kein Charakter vorhanden.")
+        return 
+    end
 
-	-- Suche nach einem Tool im Charakter
-	local tool = nil
-	for _, child in pairs(character:GetChildren()) do
-		if child:IsA("Tool") then
-			tool = child
-			break
-		end
-	end
+    local tool = nil
+    for _, child in pairs(character:GetChildren()) do
+        if child:IsA("Tool") then
+            tool = child
+            break
+        end
+    end
 
-	if tool then
-		-- Unequip the tool
-		player.Character.Humanoid:UnequipTools()
-		wait(0.1) -- Kleiner Delay, um das Unequip sicher abzuschließen
+    if tool then
+        -- Tool unequippen
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid:UnequipTools()
+        else
+            warn("Kein Humanoid im Charakter gefunden.")
+        end
+        wait(0.1)
 
-		-- Klonen und ins Backpack packen
-		local clone = tool:Clone()
-		clone.Parent = player.Backpack
-	else
-		print("Kein Tool ausgerüstet.")
-	end
+        -- Tool klonen und in Backpack packen
+        local clone = tool:Clone()
+        clone.Parent = player.Backpack
+
+        -- Skripte im geklonten Tool neu starten
+        restartScripts(clone)
+
+        print("Tool erfolgreich dupliziert!")
+    else
+        warn("Kein Tool ausgerüstet.")
+    end
 end)
+
+
 
 
