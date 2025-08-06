@@ -1,134 +1,101 @@
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
+-- Void Hacks Fake Mod Menu UI by ChatGPT
+-- Dieses UI hat keine Funktionen und ist nur Design
 
-local player = Players.LocalPlayer
+local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Alte GUIs löschen
-for _, gui in pairs(playerGui:GetChildren()) do
-    if gui:IsA("ScreenGui") and gui.Name == "Void Hacks" then
-        gui:Destroy()
-    end
+-- ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "VoidHacksUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = playerGui
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Name = "MainFrame"
+mainFrame.Size = UDim2.new(0, 500, 0, 300)
+mainFrame.Position = UDim2.new(0.5, -250, 0.5, -150)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BorderSizePixel = 0
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Parent = screenGui
+
+-- UICorner
+local mainCorner = Instance.new("UICorner")
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = mainFrame
+
+-- Topbar
+local topbar = Instance.new("Frame")
+topbar.Name = "Topbar"
+topbar.Size = UDim2.new(1, 0, 0, 40)
+topbar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+topbar.BorderSizePixel = 0
+topbar.Parent = mainFrame
+
+local topCorner = Instance.new("UICorner")
+topCorner.CornerRadius = UDim.new(0, 10)
+topCorner.Parent = topbar
+
+-- Titel
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Text = "Void Hacks"
+titleLabel.Size = UDim2.new(1, 0, 1, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextStrokeTransparency = 0.8
+titleLabel.TextSize = 24
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Parent = topbar
+
+-- Sidebar
+local sidebar = Instance.new("Frame")
+sidebar.Name = "Sidebar"
+sidebar.Size = UDim2.new(0, 120, 1, -40)
+sidebar.Position = UDim2.new(0, 0, 0, 40)
+sidebar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+sidebar.BorderSizePixel = 0
+sidebar.Parent = mainFrame
+
+-- Buttons (nur Deko)
+local buttonNames = {"Player", "Visuals", "ESP", "Aimbot", "Settings"}
+for i, name in ipairs(buttonNames) do
+    local btn = Instance.new("TextButton")
+    btn.Name = name .. "Button"
+    btn.Text = name
+    btn.Size = UDim2.new(1, -20, 0, 30)
+    btn.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 35)
+    btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 18
+    btn.Font = Enum.Font.Gotham
+    btn.BorderSizePixel = 0
+    btn.Parent = sidebar
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 6)
+    corner.Parent = btn
 end
 
--- Neues ScreenGui erstellen
-local screengui = Instance.new("ScreenGui")
-screengui.Name = "Void Hacks"
-screengui.ResetOnSpawn = false
-screengui.Parent = playerGui
+-- Content Frame (leer, nur Style)
+local content = Instance.new("Frame")
+content.Name = "Content"
+content.Size = UDim2.new(1, -120, 1, -40)
+content.Position = UDim2.new(0, 120, 0, 40)
+content.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+content.BorderSizePixel = 0
+content.Parent = mainFrame
 
-local textButton = Instance.new("TextButton")
-textButton.Parent = screengui
-textButton.Size = UDim2.new(0, 200, 0, 50)
-textButton.Position = UDim2.new(0.5, -100, 0.5, -25)
-textButton.Text = "Dupe"
-textButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-textButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-textButton.BackgroundTransparency = 0.5
-textButton.TextTransparency = 0.5
-textButton.BorderSizePixel = 0
-textButton.ZIndex = 10
+local contentCorner = Instance.new("UICorner")
+contentCorner.CornerRadius = UDim.new(0, 10)
+contentCorner.Parent = content
 
--- Rekursive Deep-Copy Funktion inkl. Attribute
-local function deepCopy(source)
-    local clone = Instance.new(source.ClassName)
-    clone.Name = source.Name
-
-    -- Werte kopieren
-    -- Versuche Properties zu kopieren (soweit sinnvoll & möglich)
-    for _, prop in pairs(source:GetAttributes()) do
-        clone:SetAttribute(prop, source:GetAttribute(prop))
-    end
-
-    -- Properties wie Ancestry, Parent etc. nicht kopieren
-    -- Versuche auch typische Properties (Value, Text, etc.) zu kopieren (optional, je nach Typ)
-    -- Das kann man ausbauen, hier ein Beispiel für Values:
-    if source:IsA("ValueBase") then
-        clone.Value = source.Value
-    elseif source:IsA("BoolValue") then
-        clone.Value = source.Value
-    elseif source:IsA("IntValue") then
-        clone.Value = source.Value
-    elseif source:IsA("NumberValue") then
-        clone.Value = source.Value
-    elseif source:IsA("StringValue") then
-        clone.Value = source.Value
-    elseif source:IsA("ObjectValue") then
-        clone.Value = source.Value
-    end
-
-    -- Children rekursiv kopieren
-    for _, child in pairs(source:GetChildren()) do
-        local childClone = deepCopy(child)
-        childClone.Parent = clone
-    end
-
-    return clone
-end
-
--- Skripte neu starten (Script und LocalScript)
-local function restartScripts(parent)
-    for _, obj in pairs(parent:GetDescendants()) do
-        if obj:IsA("Script") or obj:IsA("LocalScript") then
-            local success, err = pcall(function()
-                obj.Enabled = false
-                obj.Enabled = true
-            end)
-            if not success then
-                warn("Script konnte nicht neu gestartet werden: " .. tostring(err))
-            end
-        end
-    end
-end
-
-textButton.MouseButton1Click:Connect(function()
-    local character = player.Character
-    if not character then 
-        warn("Kein Charakter vorhanden.")
-        return 
-    end
-
-    -- Tool im Character suchen
-    local tool = nil
-    for _, child in pairs(character:GetChildren()) do
-        if child:IsA("Tool") then
-            tool = child
-            break
-        end
-    end
-
-    if tool then
-        local humanoid = character:FindFirstChildOfClass("Humanoid")
-        if humanoid then
-            humanoid:UnequipTools()
-        else
-            warn("Kein Humanoid im Charakter gefunden.")
-        end
-        wait(0.1)
-
-        -- Tool komplett deep kopieren (nicht nur clone)
-        local clone = deepCopy(tool)
-        clone.Parent = player.Backpack
-
-        -- Skripte im Klon neu starten
-        restartScripts(clone)
-
-        print("Tool erfolgreich dupliziert!")
-    else
-        warn("Kein Tool ausgerüstet.")
-    end
-end)
-
--- GUI mit Z toggeln
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-    if input.KeyCode == Enum.KeyCode.Z then
-        screengui.Enabled = not screengui.Enabled
-    end
-end)
-
-
-
+-- Schatteneffekt
+local shadow = Instance.new("UIStroke")
+shadow.Color = Color3.fromRGB(255, 255, 255)
+shadow.Thickness = 1
+shadow.Transparency = 0.9
+shadow.Parent = mainFrame
 
 
 
