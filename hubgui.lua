@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -28,6 +29,44 @@ textButton.TextTransparency = 0.5
 textButton.BorderSizePixel = 0
 textButton.ZIndex = 10
 
+-- Rekursive Deep-Copy Funktion inkl. Attribute
+local function deepCopy(source)
+    local clone = Instance.new(source.ClassName)
+    clone.Name = source.Name
+
+    -- Werte kopieren
+    -- Versuche Properties zu kopieren (soweit sinnvoll & möglich)
+    for _, prop in pairs(source:GetAttributes()) do
+        clone:SetAttribute(prop, source:GetAttribute(prop))
+    end
+
+    -- Properties wie Ancestry, Parent etc. nicht kopieren
+    -- Versuche auch typische Properties (Value, Text, etc.) zu kopieren (optional, je nach Typ)
+    -- Das kann man ausbauen, hier ein Beispiel für Values:
+    if source:IsA("ValueBase") then
+        clone.Value = source.Value
+    elseif source:IsA("BoolValue") then
+        clone.Value = source.Value
+    elseif source:IsA("IntValue") then
+        clone.Value = source.Value
+    elseif source:IsA("NumberValue") then
+        clone.Value = source.Value
+    elseif source:IsA("StringValue") then
+        clone.Value = source.Value
+    elseif source:IsA("ObjectValue") then
+        clone.Value = source.Value
+    end
+
+    -- Children rekursiv kopieren
+    for _, child in pairs(source:GetChildren()) do
+        local childClone = deepCopy(child)
+        childClone.Parent = clone
+    end
+
+    return clone
+end
+
+-- Skripte neu starten (Script und LocalScript)
 local function restartScripts(parent)
     for _, obj in pairs(parent:GetDescendants()) do
         if obj:IsA("Script") or obj:IsA("LocalScript") then
@@ -49,6 +88,7 @@ textButton.MouseButton1Click:Connect(function()
         return 
     end
 
+    -- Tool im Character suchen
     local tool = nil
     for _, child in pairs(character:GetChildren()) do
         if child:IsA("Tool") then
@@ -66,9 +106,11 @@ textButton.MouseButton1Click:Connect(function()
         end
         wait(0.1)
 
-        local clone = tool:Clone()
+        -- Tool komplett deep kopieren (nicht nur clone)
+        local clone = deepCopy(tool)
         clone.Parent = player.Backpack
 
+        -- Skripte im Klon neu starten
         restartScripts(clone)
 
         print("Tool erfolgreich dupliziert!")
@@ -77,14 +119,13 @@ textButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- GUI mit Z an/aus schalten
+-- GUI mit Z toggeln
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if gameProcessed then return end
     if input.KeyCode == Enum.KeyCode.Z then
         screengui.Enabled = not screengui.Enabled
     end
 end)
-
 
 
 
