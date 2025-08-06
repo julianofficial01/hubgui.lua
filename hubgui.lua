@@ -1,8 +1,9 @@
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Alle existierenden ScreenGuis mit Namen "Void Hacks" entfernen
+-- Alte GUIs löschen
 for _, gui in pairs(playerGui:GetChildren()) do
     if gui:IsA("ScreenGui") and gui.Name == "Void Hacks" then
         gui:Destroy()
@@ -75,6 +76,15 @@ textButton.MouseButton1Click:Connect(function()
         warn("Kein Tool ausgerüstet.")
     end
 end)
+
+-- GUI mit Z an/aus schalten
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.Z then
+        screengui.Enabled = not screengui.Enabled
+    end
+end)
+
 
 
 
