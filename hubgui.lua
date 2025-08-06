@@ -77,6 +77,7 @@ mainframeCloseStroke.Parent = mainframeClose
 local mainframeCloseButton = Instance.new("TextButton")
 mainframeCloseButton.BackgroundTransparency = 1
 mainframeCloseButton.Size = UDim2.new(0, 79, 0, 21)
+mainframeClose.Position = UDim2.new(0, 0, 0.096, 0)
 mainframeCloseButton.Text = "Close"
 mainframeCloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeCloseButton.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
@@ -102,6 +103,7 @@ mainframeTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeTitle.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
 mainframeTitle.TextScaled = true
 mainframeTitle.Parent = mainframe
+
 
 
 
