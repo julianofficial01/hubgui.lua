@@ -1,101 +1,173 @@
--- Void Hacks Fake Mod Menu UI by ChatGPT
--- Dieses UI hat keine Funktionen und ist nur Design
+--[[
+
+📦 Void Hacks UI (Visual Only)
+📌 Fake Mod Menu by ChatGPT - 2025
+🎨 UI Design inspired by professional Roblox Exploit GUIs
+
+--]]
 
 local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
 -- ScreenGui
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "VoidHacksUI"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = playerGui
+local gui = Instance.new("ScreenGui")
+gui.Name = "VoidHacksUI"
+gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = playerGui
 
 -- Main Frame
-local mainFrame = Instance.new("Frame")
-mainFrame.Name = "MainFrame"
-mainFrame.Size = UDim2.new(0, 500, 0, 300)
-mainFrame.Position = UDim2.new(0.5, -250, 0.5, -150)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-mainFrame.BorderSizePixel = 0
-mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-mainFrame.Parent = screenGui
+local main = Instance.new("Frame")
+main.Size = UDim2.new(0, 650, 0, 400)
+main.Position = UDim2.new(0.5, -325, 0.5, -200)
+main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+main.BorderSizePixel = 0
+main.AnchorPoint = Vector2.new(0.5, 0.5)
+main.Parent = gui
 
--- UICorner
-local mainCorner = Instance.new("UICorner")
-mainCorner.CornerRadius = UDim.new(0, 10)
-mainCorner.Parent = mainFrame
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 10)
+corner.Parent = main
 
 -- Topbar
-local topbar = Instance.new("Frame")
-topbar.Name = "Topbar"
+local topbar = Instance.new("TextLabel")
 topbar.Size = UDim2.new(1, 0, 0, 40)
 topbar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-topbar.BorderSizePixel = 0
-topbar.Parent = mainFrame
+topbar.Text = "Void Hacks"
+topbar.TextColor3 = Color3.fromRGB(255, 255, 255)
+topbar.Font = Enum.Font.GothamBlack
+topbar.TextSize = 24
+topbar.Parent = main
 
 local topCorner = Instance.new("UICorner")
 topCorner.CornerRadius = UDim.new(0, 10)
 topCorner.Parent = topbar
 
--- Titel
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Text = "Void Hacks"
-titleLabel.Size = UDim2.new(1, 0, 1, 0)
-titleLabel.BackgroundTransparency = 1
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextStrokeTransparency = 0.8
-titleLabel.TextSize = 24
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.Parent = topbar
-
 -- Sidebar
 local sidebar = Instance.new("Frame")
-sidebar.Name = "Sidebar"
-sidebar.Size = UDim2.new(0, 120, 1, -40)
+sidebar.Size = UDim2.new(0, 140, 1, -40)
 sidebar.Position = UDim2.new(0, 0, 0, 40)
 sidebar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-sidebar.BorderSizePixel = 0
-sidebar.Parent = mainFrame
+sidebar.Parent = main
 
--- Buttons (nur Deko)
-local buttonNames = {"Player", "Visuals", "ESP", "Aimbot", "Settings"}
-for i, name in ipairs(buttonNames) do
-    local btn = Instance.new("TextButton")
-    btn.Name = name .. "Button"
-    btn.Text = name
-    btn.Size = UDim2.new(1, -20, 0, 30)
-    btn.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 35)
-    btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.TextSize = 18
-    btn.Font = Enum.Font.Gotham
-    btn.BorderSizePixel = 0
-    btn.Parent = sidebar
+-- Content Holder
+local content = Instance.new("Frame")
+content.Size = UDim2.new(1, -140, 1, -40)
+content.Position = UDim2.new(0, 140, 0, 40)
+content.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+content.Parent = main
 
+local tabs = {"ESP", "Aimbot", "Player", "Misc", "Settings"}
+local contentFrames = {}
+
+-- Style Function
+local function styleButton(button)
+    button.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Font = Enum.Font.Gotham
+    button.TextSize = 16
+    button.BorderSizePixel = 0
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
-    corner.Parent = btn
+    corner.Parent = button
 end
 
--- Content Frame (leer, nur Style)
-local content = Instance.new("Frame")
-content.Name = "Content"
-content.Size = UDim2.new(1, -120, 1, -40)
-content.Position = UDim2.new(0, 120, 0, 40)
-content.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-content.BorderSizePixel = 0
-content.Parent = mainFrame
+-- Toggle Template
+local function createToggle(text, parent)
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, -20, 0, 30)
+    frame.BackgroundTransparency = 1
+    frame.Parent = parent
 
-local contentCorner = Instance.new("UICorner")
-contentCorner.CornerRadius = UDim.new(0, 10)
-contentCorner.Parent = content
+    local label = Instance.new("TextLabel")
+    label.Text = text
+    label.Size = UDim2.new(0.7, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255, 255, 255)
+    label.Font = Enum.Font.Gotham
+    label.TextSize = 14
+    label.TextXAlignment = Enum.TextXAlignment.Left
+    label.Parent = frame
 
--- Schatteneffekt
-local shadow = Instance.new("UIStroke")
-shadow.Color = Color3.fromRGB(255, 255, 255)
-shadow.Thickness = 1
-shadow.Transparency = 0.9
-shadow.Parent = mainFrame
+    local toggle = Instance.new("TextButton")
+    toggle.Size = UDim2.new(0, 60, 0, 25)
+    toggle.Position = UDim2.new(1, -70, 0.5, -12)
+    toggle.Text = "OFF"
+    toggle.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    toggle.TextColor3 = Color3.fromRGB(255, 0, 0)
+    toggle.Font = Enum.Font.GothamBold
+    toggle.TextSize = 14
+    toggle.Parent = frame
+
+    local corner = Instance.new("UICorner")
+    corner.Parent = toggle
+
+    toggle.MouseButton1Click:Connect(function()
+        if toggle.Text == "OFF" then
+            toggle.Text = "ON"
+            toggle.TextColor3 = Color3.fromRGB(0, 255, 0)
+        else
+            toggle.Text = "OFF"
+            toggle.TextColor3 = Color3.fromRGB(255, 0, 0)
+        end
+    end)
+end
+
+-- Create Tabs
+for i, tabName in ipairs(tabs) do
+    local btn = Instance.new("TextButton")
+    btn.Text = tabName
+    btn.Size = UDim2.new(1, -20, 0, 30)
+    btn.Position = UDim2.new(0, 10, 0, 10 + (i - 1) * 40)
+    btn.Parent = sidebar
+    styleButton(btn)
+
+    local tabContent = Instance.new("Frame")
+    tabContent.Size = UDim2.new(1, 0, 1, 0)
+    tabContent.BackgroundTransparency = 1
+    tabContent.Visible = false
+    tabContent.Parent = content
+    contentFrames[tabName] = tabContent
+
+    btn.MouseButton1Click:Connect(function()
+        for _, frame in pairs(contentFrames) do
+            frame.Visible = false
+        end
+        tabContent.Visible = true
+    end)
+end
+
+-- ESP Tab Options
+createToggle("Name", contentFrames["ESP"])
+createToggle("Health", contentFrames["ESP"])
+createToggle("Distance", contentFrames["ESP"])
+createToggle("Tool Holding", contentFrames["ESP"])
+createToggle("Box ESP", contentFrames["ESP"])
+createToggle("Chams", contentFrames["ESP"])
+
+-- Aimbot Options
+createToggle("FOV Circle", contentFrames["Aimbot"])
+createToggle("Prediction", contentFrames["Aimbot"])
+createToggle("Smoothing", contentFrames["Aimbot"])
+createToggle("Team Check", contentFrames["Aimbot"])
+
+-- Player Options
+createToggle("WalkSpeed", contentFrames["Player"])
+createToggle("JumpPower", contentFrames["Player"])
+createToggle("Fly", contentFrames["Player"])
+createToggle("NoClip", contentFrames["Player"])
+
+-- Misc Options
+createToggle("Gun Dupe", contentFrames["Misc"])
+createToggle("Anti-Lag", contentFrames["Misc"])
+createToggle("Auto Pickup", contentFrames["Misc"])
+createToggle("Rejoin Server", contentFrames["Misc"])
+
+-- Settings
+createToggle("Dark Theme", contentFrames["Settings"])
+createToggle("Close UI", contentFrames["Settings"])
+
+-- Default visible
+contentFrames["ESP"].Visible = true
 
 
 
