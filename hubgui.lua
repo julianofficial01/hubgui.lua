@@ -76,7 +76,7 @@ mainframeCloseStroke.Parent = mainframeClose
 -- Close Button (TextButton mit fetter Schrift, zentriert)
 local mainframeCloseButton = Instance.new("TextButton")
 mainframeCloseButton.BackgroundTransparency = 1
-mainframeCloseButton.Size = UDim2.new(1, 0, 1, 0) -- volle Größe vom Parent
+mainframeCloseButton.Size = UDim2.new(0, 97, 0, 18) -- volle Größe vom Parent
 mainframeCloseButton.Position = UDim2.new(0.5, 0, 0.5, 0)
 mainframeCloseButton.AnchorPoint = Vector2.new(0.5, 0.5) -- zentriert im Parent
 mainframeCloseButton.Text = "Close"
@@ -105,8 +105,6 @@ mainframeTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 mainframeTitle.FontFace = Font.fromName("Arimo", Enum.FontWeight.Bold)
 mainframeTitle.TextScaled = true
 mainframeTitle.Parent = mainframe
-
-
 
 
 
